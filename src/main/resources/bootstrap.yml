@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: retail-bank-config-server
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,refresh
+  endpoint:
+    env:
+      post:
+        enabled: true
+
