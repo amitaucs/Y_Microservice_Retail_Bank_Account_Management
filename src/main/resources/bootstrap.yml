@@ -4,6 +4,8 @@ spring:
       discovery:
         enabled: true
         service-id: retail-bank-config-server
+  profiles:
+    active: prod
 management:
   endpoints:
     web:
