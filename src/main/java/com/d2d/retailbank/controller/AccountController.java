@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@Tag(name = "Retail Bank Account management application")
+@Tag(name = "${tagName}")
 public class AccountController {
 
    private RetailBankProperties retailBankProperties;
