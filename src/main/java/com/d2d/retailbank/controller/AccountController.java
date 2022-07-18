@@ -27,6 +27,7 @@ public class AccountController {
    @GetMapping("/welcome")
    public String welcome(@RequestHeader Map<String,String> headers){
        log.info("###### header value is : {}", headers.get("retailbank"));
+       log.info("###### pre filter header value is : {}", headers.get("retailbankprefilter"));
        return retailBankProperties.getMessage();
    }
 
