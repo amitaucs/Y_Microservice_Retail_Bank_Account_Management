@@ -25,10 +25,11 @@ public class AccountController {
    private RetailBankProperties retailBankProperties;
 
    @GetMapping("/welcome")
-   public String welcome(@RequestHeader Map<String,String> headers){
+   public ResponseEntity<String> welcome(@RequestHeader Map<String,String> headers){
        log.info("###### header value is : {}", headers.get("retailbank"));
        log.info("###### pre filter header value is : {}", headers.get("retailbankprefilter"));
-       return retailBankProperties.getMessage();
+       return ResponseEntity.status(HttpStatus.OK).body(retailBankProperties.getMessage());
+
    }
 
 
