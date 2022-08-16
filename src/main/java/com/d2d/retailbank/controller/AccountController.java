@@ -2,13 +2,13 @@ package com.d2d.retailbank.controller;
 
 import com.d2d.retailbank.dto.AccountDetails;
 import com.d2d.retailbank.response.AccountResponse;
+import com.d2d.retailbank.service.AccountService;
 import com.d2d.retailbank.vo.RetailBankProperties;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +17,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@AllArgsConstructor
 @Tag(name = "${tagName}")
 @Slf4j
 public class AccountController {
 
    private RetailBankProperties retailBankProperties;
+   private AccountService accountService;
 
-   @GetMapping("/welcome")
+    public AccountController(RetailBankProperties retailBankProperties, AccountService accountService) {
+        this.retailBankProperties = retailBankProperties;
+        this.accountService = accountService;
+    }
+
+    @GetMapping("/welcome")
    public ResponseEntity<String> welcome(@RequestHeader Map<String,String> headers){
        log.info("###### header value is : {}", headers.get("retailbank"));
        log.info("###### pre filter header value is : {}", headers.get("retailbankprefilter"));
@@ -39,11 +44,19 @@ public class AccountController {
     @PostMapping("/createNewAccount")
     ResponseEntity<AccountResponse> createNewAccount(@RequestBody AccountDetails accountDetails) {
 
-        var accountResponse = AccountResponse.builder()
-                .message("create account development is in progress")
-                .build();
+        AccountResponse accountResponse;
+        if(null == accountDetails){
+             accountResponse = AccountResponse.builder()
+                    .message("Account details are empty")
+                    .build();
+        }else{
+            accountService.createAccount(accountDetails);
+            accountResponse = AccountResponse.builder()
+                    .message("Customer Account has been created")
+                    .build();
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
+     return  ResponseEntity.status(HttpStatus.OK).body(accountResponse);
     }
 
     @Operation(summary = "Get all bank accounts")
@@ -52,8 +65,9 @@ public class AccountController {
     @GetMapping("/getAllAccount")
     ResponseEntity<AccountResponse> getAllAccount() {
 
+
         var accountResponse = AccountResponse.builder()
-                .message("get all account development is in progress")
+                .message("Account details has been saved")
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
 

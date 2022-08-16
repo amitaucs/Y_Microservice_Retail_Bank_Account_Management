@@ -1,30 +1,30 @@
 package com.d2d.retailbank.entity;
 
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
+
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name= "T_CUSTOMER_ACCOUNT")
 public class CustomerAccount {
     @Id
-    @Column(name = "account_id", nullable = false)
+    @Column(name="account_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "customer_first_name")
+    @Column(name = "customerFirstName")
     private String userFirstName;
-    @Column(name = "customer_last_name")
+    @Column(name = "customerLastName")
     private String userLastName;
-    @Column(name = "customer_address")
+    @Column(name = "customerAddress")
     private String address;
-    @Column(name = "customer_phone-number")
+    @Column(name = "customerPhoneNumber")
     private String phoneNumber;
-    @Column(name = "customer_account_number")
+    @Column(name = "customerAccountNumber")
     private String accountNumber;
+
 }

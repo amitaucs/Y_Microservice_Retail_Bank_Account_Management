@@ -18,6 +18,5 @@ public class AccountDetails {
     private String address;
     @Schema(description =  "Account holder's phone number")
     private String phoneNumber;
-    @Schema(description =  "Account holder's account number")
-    private String accountNumber;
+
 }
