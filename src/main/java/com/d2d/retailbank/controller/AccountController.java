@@ -1,6 +1,7 @@
 package com.d2d.retailbank.controller;
 
 import com.d2d.retailbank.dto.AccountDetails;
+import com.d2d.retailbank.dto.AccountDetailsResponse;
 import com.d2d.retailbank.response.AccountResponse;
 import com.d2d.retailbank.service.AccountService;
 import com.d2d.retailbank.vo.RetailBankProperties;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,8 +23,8 @@ import java.util.Map;
 @Slf4j
 public class AccountController {
 
-   private RetailBankProperties retailBankProperties;
-   private AccountService accountService;
+    private RetailBankProperties retailBankProperties;
+    private AccountService accountService;
 
     public AccountController(RetailBankProperties retailBankProperties, AccountService accountService) {
         this.retailBankProperties = retailBankProperties;
@@ -30,12 +32,12 @@ public class AccountController {
     }
 
     @GetMapping("/welcome")
-   public ResponseEntity<String> welcome(@RequestHeader Map<String,String> headers){
-       log.info("###### header value is : {}", headers.get("retailbank"));
-       log.info("###### pre filter header value is : {}", headers.get("retailbankprefilter"));
-       return ResponseEntity.status(HttpStatus.OK).body(retailBankProperties.getMessage());
+    public ResponseEntity<String> welcome(@RequestHeader Map<String, String> headers) {
+        log.info("###### header value is : {}", headers.get("retailbank"));
+        log.info("###### pre filter header value is : {}", headers.get("retailbankprefilter"));
+        return ResponseEntity.status(HttpStatus.OK).body(retailBankProperties.getMessage());
 
-   }
+    }
 
 
     @Operation(summary = "Create a new bank account for customer")
@@ -45,31 +47,28 @@ public class AccountController {
     ResponseEntity<AccountResponse> createNewAccount(@RequestBody AccountDetails accountDetails) {
 
         AccountResponse accountResponse;
-        if(null == accountDetails){
-             accountResponse = AccountResponse.builder()
+        if (null == accountDetails) {
+            accountResponse = AccountResponse.builder()
                     .message("Account details are empty")
                     .build();
-        }else{
+        } else {
             accountService.createAccount(accountDetails);
             accountResponse = AccountResponse.builder()
                     .message("Customer Account has been created")
                     .build();
         }
 
-     return  ResponseEntity.status(HttpStatus.OK).body(accountResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
     }
 
     @Operation(summary = "Get all bank accounts")
     @ApiResponses(value = {@ApiResponse(responseCode = "500", description = "Internal server error"),
             @ApiResponse(responseCode = "200", description = "Ok")})
     @GetMapping("/getAllAccount")
-    ResponseEntity<AccountResponse> getAllAccount() {
+    ResponseEntity<List<AccountDetailsResponse>> getAllAccount() {
 
-
-        var accountResponse = AccountResponse.builder()
-                .message("Account details has been saved")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
+        var accountResponses = accountService.getAllAccount();
+        return ResponseEntity.status(HttpStatus.OK).body(accountResponses);
 
     }
 
@@ -79,7 +78,7 @@ public class AccountController {
     @GetMapping("/getAccountForCustomer")
     ResponseEntity<AccountResponse> getAccountForCustomer(
             @Parameter(description = "Customer name for which bank account details is needed",
-                     required = true)
+                    required = true)
             @RequestParam(value = "customerName") String customerName) {
 
         var accountResponse = AccountResponse.builder()
