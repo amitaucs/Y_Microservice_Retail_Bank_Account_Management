@@ -51,11 +51,31 @@ public class AccountService {
 
     }
 
+
+    public String updateCustomerAccount(AccountDetails accountDetails){
+
+        var userFirstName = accountDetails.getUserFirstName();
+        var account =  customerAccountRepo.findAccountByUserFirstName(userFirstName);
+        if(null == account){
+            createAccount(accountDetails);
+        }else{
+
+            var id = account.getId();
+            var accountNumber = account.getAccountNumber();
+            BeanUtils.copyProperties(accountDetails,account);
+            account.setAccountNumber(accountNumber);
+            account.setId(id);
+            customerAccountRepo.save(account);
+        }
+        return "success";
+    }
+
     private AccountDetailsResponse entityToAccountResponse(CustomerAccount customerAccount){
         var accountDetailsResponse = AccountDetailsResponse.builder().build();
         BeanUtils.copyProperties(customerAccount,accountDetailsResponse);
         return accountDetailsResponse;
     }
+
 
 
 

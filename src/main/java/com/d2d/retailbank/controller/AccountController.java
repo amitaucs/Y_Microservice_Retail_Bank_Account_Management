@@ -89,12 +89,15 @@ public class AccountController {
     @ApiResponses(value = {@ApiResponse(responseCode = "500", description = "Internal server error"),
             @ApiResponse(responseCode = "200", description = "Ok")})
     @PutMapping("/updateAccount")
-    ResponseEntity<AccountResponse> updateAccount(@RequestBody AccountDetails accountDetails) {
+    ResponseEntity<String> updateAccount(@RequestBody AccountDetails accountDetails) {
 
-        var accountResponse = AccountResponse.builder()
-                .message("Update  account development is in progress")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
+        if(null == accountDetails){
+            return ResponseEntity.badRequest().body("Account details is empty");
+        }else{
+           var response = accountService.updateCustomerAccount(accountDetails);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+
     }
 
     @Operation(summary = "Delete bank account  for a customer")
