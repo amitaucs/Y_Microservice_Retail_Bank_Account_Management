@@ -104,11 +104,13 @@ public class AccountController {
     @ApiResponses(value = {@ApiResponse(responseCode = "500", description = "Internal server error"),
             @ApiResponse(responseCode = "200", description = "Ok")})
     @DeleteMapping("/deleteAccount")
-    ResponseEntity<AccountResponse> deleteAccount(@RequestBody AccountDetails accountDetails) {
+    ResponseEntity<String> deleteAccount(@RequestBody AccountDetails accountDetails) {
 
-        var accountResponse = AccountResponse.builder()
-                .message("delete  account development is in progress")
-                .build();
-        return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
+        if(null == accountDetails){
+            return ResponseEntity.badRequest().body("Account details is empty");
+        }else{
+            var response = accountService.deleteCustomerAccount(accountDetails);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 }

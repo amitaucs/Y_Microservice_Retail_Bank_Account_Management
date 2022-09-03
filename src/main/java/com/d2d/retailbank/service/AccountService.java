@@ -70,12 +70,24 @@ public class AccountService {
         return "success";
     }
 
+    public String deleteCustomerAccount(AccountDetails accountDetails) {
+
+        var userFirstname = accountDetails.getUserFirstName();
+        var account = customerAccountRepo.findAccountByUserFirstName(userFirstname);
+        if(null == account){
+            return "no account found for delete";
+        }else{
+            customerAccountRepo.delete(account);
+            return "Account for "+userFirstname+ " is deleted";
+        }
+
+    }
+
     private AccountDetailsResponse entityToAccountResponse(CustomerAccount customerAccount){
         var accountDetailsResponse = AccountDetailsResponse.builder().build();
         BeanUtils.copyProperties(customerAccount,accountDetailsResponse);
         return accountDetailsResponse;
     }
-
 
 
 
