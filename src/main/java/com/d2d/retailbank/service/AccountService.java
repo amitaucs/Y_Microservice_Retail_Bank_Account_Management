@@ -43,6 +43,14 @@ public class AccountService {
 
     }
 
+    public AccountDetailsResponse getAccountForCustomer(String firstName){
+
+       var account =  customerAccountRepo.findAccountByUserFirstName(firstName);
+       var accountResponse = entityToAccountResponse(account);
+       return accountResponse;
+
+    }
+
     private AccountDetailsResponse entityToAccountResponse(CustomerAccount customerAccount){
         var accountDetailsResponse = AccountDetailsResponse.builder().build();
         BeanUtils.copyProperties(customerAccount,accountDetailsResponse);

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CustomerAccountRepo extends JpaRepository<CustomerAccount,Long> {
+
+    CustomerAccount findAccountByUserFirstName(String firstName);
 }

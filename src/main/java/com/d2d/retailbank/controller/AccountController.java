@@ -76,14 +76,12 @@ public class AccountController {
     @ApiResponses(value = {@ApiResponse(responseCode = "500", description = "Internal server error"),
             @ApiResponse(responseCode = "200", description = "Ok")})
     @GetMapping("/getAccountForCustomer")
-    ResponseEntity<AccountResponse> getAccountForCustomer(
+    ResponseEntity<AccountDetailsResponse> getAccountForCustomer(
             @Parameter(description = "Customer name for which bank account details is needed",
                     required = true)
             @RequestParam(value = "customerName") String customerName) {
 
-        var accountResponse = AccountResponse.builder()
-                .message("get  account development is in progress")
-                .build();
+        var accountResponse = accountService.getAccountForCustomer(customerName);
         return ResponseEntity.status(HttpStatus.OK).body(accountResponse);
     }
 
